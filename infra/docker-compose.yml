@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  mqqt:
+    image: eclipse-mosquitto
+    container_name: iot_mqqt
+    ports:
+     - "80"
+     - "443"
+     - "1883"
+     - "9001"
+    volumes:
+      - ./deploy/mqqt/config:/mosquitto/config
+      - ./deploy/mqqt/data:/mosquitto/data
+      - ./deploy/mqqt/log:/mosquitto/log
+    networks:
+      ci_net:
+        ipv4_address: 172.0.0.2
+
+networks:
+  ci_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.0.0.0/24
+        gateway: 172.0.0.254
