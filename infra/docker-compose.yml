@@ -14,11 +14,72 @@ services:
       - ./deploy/mqqt/data:/mosquitto/data
       - ./deploy/mqqt/log:/mosquitto/log
     networks:
-      ci_net:
+      iot_net:
         ipv4_address: 172.0.0.2
+  
+  iot_db:
+    container_name: iot_db
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "3306"
+    volumes:
+      - ./deploy/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "iot123"
+      MYSQL_DATABASE: iot
+      MYSQL_USER: iot
+      MYSQL_PASSWORD: iot123
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+
+    networks:
+      iot_net:
+        ipv4_address: 172.0.0.3
+
+  iot_portal:
+    container_name: iot_portal
+    build:
+      context: ./../
+      dockerfile: infra/nginx/Dockerfile
+    restart: always
+    privileged: true
+    ports:
+      - "80"
+      - "443"
+    depends_on:
+      - iot_db
+      - iot_fpm
+    links:
+      - iot_db
+      - iot_fpm
+    volumes:
+      - ./../api/:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      iot_net:
+        ipv4_address: 172.0.0.5
+
+  iot_fpm:
+    container_name: iot_fpm
+    build:
+      context: ./../
+      dockerfile: infra/fpm/Dockerfile
+    restart: always
+    privileged: true
+    ports:
+      - "9000"
+    volumes:
+      - ./../api/:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      iot_net:
+        ipv4_address: 172.0.0.4
+
+
+
 
 networks:
-  ci_net:
+  iot_net:
     driver: bridge
     ipam:
       driver: default
