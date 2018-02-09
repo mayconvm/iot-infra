@@ -10,23 +10,23 @@ $ docker-compose up
 
 # TODO
 
-* Configurate of file docker-compose.yml with Network and IP fixe
-* Configurate Mosquitto
-* Configurate Symfony+FPM
-* Configurate Mysql
-* Configurate https://api-platform.com
+* Configurate of file docker-compose.yml with Network and IP fixe - OK
+* Configurate Mosquitto - OK
+* Configurate Symfony+FPM - OK
+* Configurate Mysql - OK
+* Configurate https://api-platform.com - OK
 * Create migration to database Mysql
-	* Database: iot
-	* Tables:
-		* device
+	* Database: iot - OK
+	* Tables: - OK
+		* device - OK
 			- id
 			- token	
 			- id_config
-		* config
+		* config - OK
 			- id
 			- host Mqqt
 			- user Mqqt
 			- pass Mqqt
 			- protocol Mqqt
-* Create entity in Doctrine
-* Create API to device and config
+* Create entity in Doctrine - OK
+* Create API to device and config - OK
